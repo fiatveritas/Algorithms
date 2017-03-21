@@ -34,4 +34,4 @@ if __name__ == '__main__':
 	print number_1
 	print number_2
 	print karatsuba(x = number_1, y = number_2)
-	
+	numbers_file.close()
