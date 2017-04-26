@@ -1,5 +1,6 @@
 #!/usr/bin/python2.7
 def merge_sort(alist):
+    counter = 0
     if len(alist) > 1:
         mid = len(alist) // 2
         lefthalf = alist[:mid]
@@ -39,6 +40,6 @@ def merge_sort(alist):
 if __name__ == "__main__":
     numbers_file = open('integerArray.txt', 'r')
     unsorted_list = [int(i) for i in numbers_file.read().split()]
-	#merge_sort(unsorted_list)
-	#print(unsorted_list)
+    print merge_sort(unsorted_list)
+    print unsorted_list
     numbers_file.close()
