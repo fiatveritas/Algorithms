@@ -84,21 +84,15 @@ def quick_sort1(array, leftindex, rightindex):
     if leftindex < rightindex:
         
         newpivotindex = partition_first(array, leftindex, rightindex)
-        
         first_comparison += (rightindex - leftindex - 1)
-        
         quick_sort1(array, leftindex, newpivotindex) 
-        
         quick_sort1(array, newpivotindex + 1, rightindex)
         
 def quicksort_last(array, leftindex, rightindex):
     global last_comparison
     if leftindex < rightindex:
-
         newpivotindex = partition_last(array, leftindex, rightindex)
-
         last_comparison += (rightindex - leftindex - 1)
-
         quicksort_last(array, leftindex, newpivotindex)
         quicksort_last(array, newpivotindex + 1, rightindex)
 
@@ -106,13 +100,9 @@ def quicksort_last(array, leftindex, rightindex):
 def quicksort_median(array, leftindex, rightindex):
      global median_comparison
      if leftindex < rightindex:
-
          newpivotindex = partition_median(array, leftindex, rightindex)
-
          median_comparison += (rightindex - leftindex - 1)
          quicksort_median(array, leftindex, newpivotindex)
-         
-
          quicksort_median(array, newpivotindex + 1, rightindex)
 
 if __name__ == "__main__":
