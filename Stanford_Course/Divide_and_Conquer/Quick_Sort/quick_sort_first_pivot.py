@@ -4,8 +4,8 @@ first_comparison = 0
 last_comparison = 0
 median_comparison = 0
 
-#A method for partition around the first element of the array
 def partition_first(array, left_end, right_end):
+    """Partition around the first element of the array"""
     pivot = array[left_end]
     i = left_end + 1
     for j in range(left_end + 1, right_end):
@@ -19,10 +19,9 @@ def partition_first(array, left_end, right_end):
     array[left_end] = array[i-1]
     array[i-1] = left_endval
     return i - 1 
-
-#A method for partitioning around the last element of the array
+ 
 def partition_last(array, left_end, right_end):
-    
+    """Partitioning around the last element of the array"""
     pivot = array[right_end - 1]
     array[right_end - 1] = array[left_end]
     array[left_end] = pivot
@@ -40,17 +39,17 @@ def partition_last(array, left_end, right_end):
     array[i - 1] = left_endval
     return i - 1 
 
-#A method to calculate the median of three numbers using two comparisons
 def median(a, b, c):
+    """Calculate the median of three numbers using two comparisons."""
     if (a - b) * (c - a) >= 0:
         return a
     elif (b - a) * (c - b) >= 0:
         return b
     else:
         return c
-
-#A method to partition around the median
+ 
 def partition_median(array, left_end, right_end):
+    """Partition around the median"""
     left = array[left_end]
     right = array[right_end - 1]
     length = right_end - left_end
@@ -77,9 +76,8 @@ def partition_median(array, left_end, right_end):
     array[i - 1] = left_endval
     return i - 1 
 
-    
-#Implement quicksort while partitioning around the first index
 def quick_sort1(array, leftindex, rightindex):
+    """Quicksort partitioning around the first index"""
     global first_comparison
     if leftindex < rightindex:
         
@@ -89,6 +87,7 @@ def quick_sort1(array, leftindex, rightindex):
         quick_sort1(array, newpivotindex + 1, rightindex)
         
 def quicksort_last(array, leftindex, rightindex):
+    """Quicksort partitioning around the last index"""
     global last_comparison
     if leftindex < rightindex:
         newpivotindex = partition_last(array, leftindex, rightindex)
@@ -96,8 +95,9 @@ def quicksort_last(array, leftindex, rightindex):
         quicksort_last(array, leftindex, newpivotindex)
         quicksort_last(array, newpivotindex + 1, rightindex)
 
- 
+
 def quicksort_median(array, leftindex, rightindex):
+    """Quicksort partitioning around the median index"""
      global median_comparison
      if leftindex < rightindex:
          newpivotindex = partition_median(array, leftindex, rightindex)
