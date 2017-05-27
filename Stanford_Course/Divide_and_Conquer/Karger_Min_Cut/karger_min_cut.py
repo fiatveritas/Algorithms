@@ -40,13 +40,9 @@ def readGraphFromFile(filename):
     return graph
 
 if __name__ == '__main__':
-    graph = readGraphFromFile("karger_min_cut.txt") # read the graph from a text file
+    graph = readGraphFromFile("karger_min_cut.txt")
     numberOfRepeatedTrials = 100
-    #graph[1] = [2, 4]
-    #graph[2] = [1, 3, 4]
-    #graph[3] = [2, 4]
-    #graph[4] = [1, 2, 3]
-    for i in range(1, numberOfRepeatedTrials):  # we do repeated trials to find the minimum cut.
+    for i in range(1, numberOfRepeatedTrials):  # iterate to find min
         copiedGraph = copy.deepcopy(graph)
         kargerMinCut(copiedGraph)
     print("MinCut is " + str(min(cuts)))
