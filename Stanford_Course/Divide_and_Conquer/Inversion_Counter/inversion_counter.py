@@ -3,12 +3,10 @@ def merge_sort(to_sort):
     if len(to_sort) > 1:
         [left_half, right_half] = divide(to_sort)
         #print x1,x2
-        left_half, leftInv = merge_sort(left_half)
-        right_half, rightInv = merge_sort(right_half)
-        #print leftInv,rightInv
-        merged, splitInv = merge(left_half, right_half)
-        #print splitInv
-        return merged,(leftInv + rightInv + splitInv)
+        left_half, left_inv = merge_sort(left_half)
+        right_half, right_inv = merge_sort(right_half)
+        merged, split_inv = merge(left_half, right_half)
+        return merged,(left_inv + right_inv + split_inv)
     else:
         return to_sort, 0
 
