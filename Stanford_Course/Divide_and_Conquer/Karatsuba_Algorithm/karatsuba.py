@@ -8,7 +8,7 @@ def divider(number, counter = 0):
 		counter += 1
 		return divider(number / 10, counter = counter)
 def karatsuba(x, y):
-	#print x, y
+	"""This methods implements karatsuba's method (base 10)."""
 	if (x < 10) or (y < 10):
 		return x * y
 	elif (x >= 10) and (y >= 10):
@@ -17,10 +17,8 @@ def karatsuba(x, y):
 
 		x1 = x / (10 **(div_by_2))
 		x0 = x % (10 **(div_by_2))
-		#print str(x), '=', str(x_1), '* 2^', str(m), '+',str(x_0)
 		y1 = y / (10 **(div_by_2))
 		y0 = y % (10 **(div_by_2))
-		#print str(y), '=', str(y_1), '* 2^', str(m), '+',str(y_0)
 		z2 = x1 * y1
 		z0 = karatsuba(x0, y0)
 		z1 = karatsuba(x1 + x0, y1 + y0) - z2 - z0
