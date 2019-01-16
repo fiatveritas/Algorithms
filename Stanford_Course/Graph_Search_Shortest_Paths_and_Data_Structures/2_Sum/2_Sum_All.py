@@ -3,7 +3,6 @@ import random #for randomizing lists
 
 def sum_2(list_of_numbers, total, look_up_table, pairs_found):
 	counter = 0
-	#print("Passed hashtable:", look_up_table)
 
 	for i in list_of_numbers:
 		if not look_up_table:
@@ -13,16 +12,16 @@ def sum_2(list_of_numbers, total, look_up_table, pairs_found):
 		if total - i in look_up_table:
 			num_1, num_2 = create_pairs(total - i, i)
 			if (num_1, num_2) in pairs_found:
-				continue
+				continue #needed when checking if a pair exists already in hashtable. Again, needed for uniqueness.
 			else:
 				pairs_found[(num_1, num_2)] = True
-				#print (i, "+", total - i, "=", total)
 				counter += 1
-				break
-	#print("after populating:", look_up_table)
+				break #break statement needed to find only one ocurrence. Assignment asked to find if one pair exists, not to find all. Uncomment to find all pairs
 	return counter, look_up_table, pairs_found
 
 def create_pairs(num_1, num_2):
+	"""this method sorts the pairs in order.
+	   needed to check for uniqueness."""
 	if num_1 < num_2:
 		return num_1, num_2
 	elif num_2 < num_1:
@@ -48,6 +47,10 @@ def check_algorithm():
 		print(sum_2(test_array, total, look_up_table, pairs_found)[0], "pair(s) adding to", total)
 
 def read_file():
+	"""This method opens the file that contains
+	   one-million integers. This file was given
+	   by the course masters. Returns a list of
+	   integers contained in the file."""
 	f = open('2_Sum.txt', 'r')
 	lines = f.readlines()
 	if lines:
@@ -58,34 +61,36 @@ def read_file():
 	return [int(line) for line in lines]
 
 def run_2sum(list_of_numbers):
-	counter = 0
-	look_up_table = {}
-	pairs_found = {}
+	"""This method implements the 2sum algorithm. It determines
+	   if each number in the range(-10000, 10001) has pair in 
+	   the input file."""
+	counter = 0 #counts the number of the relevant range that has a pair in the file
+	look_up_table = {} #hashtable for two 2sum
+	pairs_found = {} #keeping track of pairs found...needed to check uniqueness
 	for t in range(-10000, 10001):
-		print("sum:", t)
-		count, look_up_table, pairs_found = sum_2(list_of_numbers, t, look_up_table, pairs_found)
+		count, look_up_table, pairs_found = sum_2(list_of_numbers, t, look_up_table, pairs_found) #this funtion tracks the number of ocurrences of pairs for the iterate
 		counter += count
-		print("pairs:", counter)
-	#print(look_up_table)
 	return counter
 
 
 if __name__ == "__main__":
 	list_of_numbers = read_file()
 	print(run_2sum(list_of_numbers))
-	#check_algorithm()
+	#check_algorithm() #this line runs the input mentioned above for random lists
 	print("================")
 
 	
-# Algorithms: Design and Analysis Part 1
+# Algorithms: Design and Analysis
 # Stanford University
 
-# Programming Question 6 - Part 1
-# Count number of 2 sum variations where x + y = t
-# t is any integer in interval [-10000, 10000]
+# Programming Question
+# Count the number of 2-sum variations where x + y = t
+# t is any integer in interval [-10000, 10000] inclusive
 # Hash table utilization problem
 
 """
+Prompt (verbatim):
+
 The goal of this problem is to implement a variant of
 the 2-SUM algorithm covered in this week's lectures.
 
