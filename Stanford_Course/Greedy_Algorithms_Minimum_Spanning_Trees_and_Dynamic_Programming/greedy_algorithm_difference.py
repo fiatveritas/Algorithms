@@ -1,8 +1,25 @@
 #!/usr/bin/python3
 
+def read_file():
+	f = open('jobs.txt', 'r')
+	if f:
+		print("file read!")
+		lines = f.readlines()
+		num_jobs = int(lines[0])
+		lines = lines[1:]
+		lines = {(int(line.split()[0]), int(line.split()[1])) : (int(line.split()[0]) - int(line.split()[1]))  for line in lines}
+		f.close()
+		return num_jobs, lines
+	else:
+		print("error: problem with file")
+		f.close()
+		return "Fix it!"
+
 
 if __name__ == "__main__":
-	print("Jesse")
+	num_jobs, weights_lengths = read_file()
+	#print(num_jobs)
+	print(weights_lengths)
 
 """This file describes a set of jobs with positive and
 integral weights and lengths. It has the format
