@@ -15,54 +15,84 @@ def read_file():
 	else:
 		f.close()
 
+def merge_sort(given_list):
+	"""This method runs merge
+	sorting calls on several
+	defined functions."""
 
+	merged_array = []
 
-def quicksort(to_be_sorted):
-	"""this method sorts an array of unique positive numbers using
-	the quicksort algorithm using the last element as a pivot."""
-	if len(to_be_sorted) == 0:
+	if len(given_list) == 0: #base case for empty list
+		return [] #must return empty, otherwise get error
+	if len(given_list) == 1: #base case for when list is one length, key point
+		return given_list
+	if len(given_list) > 0: #base case for divide and conquer
+		on_the_left = merge_sort(left_list(given_list))
+		on_the_right = merge_sort(right_list(given_list))
+		merged_array = ascending_order(on_the_left, on_the_right)
+	return merged_array
+
+def left_list(given_list):
+	"""Creates left list by contiually
+	dividing input list by two. This
+	method does first half of the given
+	array."""
+	if int(len(given_list) / 2) > 0:
+		return given_list[:int(len(given_list) / 2)]
+	else:
 		return []
-	if len(to_be_sorted) == 1:
-		return to_be_sorted
-	if len(to_be_sorted) > 1:
-		i = 0
-		j = 0
-		upper_limit = len(to_be_sorted)
-		print(to_be_sorted)
-		while j < upper_limit - 1:
-			if i == j and to_be_sorted[j][2] < to_be_sorted[upper_limit -1][2]:
-				print(to_be_sorted[j][2], "vs", to_be_sorted[upper_limit -1][2])
-				i += 1
-				j += 1
-			elif to_be_sorted[j][2] > to_be_sorted[upper_limit -1][2]:
-				print(to_be_sorted[j][2], "vs", to_be_sorted[upper_limit -1][2])
-				j += 1
-			elif to_be_sorted[j][2] < to_be_sorted[upper_limit -1][2]: # [49, 97, 53, 5, 33, 65, 62, 51, 38, 61]
-			    print(to_be_sorted[j][2], "vs", to_be_sorted[upper_limit -1][2])
-			    i += 1
-			    j += 1
-			elif to_be_sorted[j][2] == to_be_sorted[j][2]:
-				print(to_be_sorted[j][2], "vs", to_be_sorted[upper_limit -1][2])
-				i += 1
-				j += 1
-	to_be_sorted[i], to_be_sorted[upper_limit -1] = swap(to_be_sorted[i], to_be_sorted[upper_limit -1])
-	to_be_sorted[:i] = quicksort(to_be_sorted[:i])
-	to_be_sorted[i:] = quicksort(to_be_sorted[i:])
-	print(to_be_sorted)
-	return to_be_sorted
 
+def right_list(given_list):
+	"""Creates left list by contiually
+	dividing input list by two. This
+	method does second half of the give
+	array."""
+	if int(len(given_list) / 2) > 0:
+		return given_list[int(len(given_list) / 2):]
+	else:
+		return []			
 
-def swap(element_1, element_2):
-	"""this method swaps two elements passed into the function"""
-	holder = element_1
-	element_1 = element_2
-	element_2 = holder
-	return element_1, element_2
+def ascending_order(left_array, right_array):
+	"""This method sorts the array by
+	ascending order."""
+	ordered_array = []
+
+	if left_array:
+		left_size = len(left_array)
+	else: #need to hard code zero length for empty list because of error message
+		left_size = 0
+	if right_array:
+		right_size = len(right_array)
+	else: #need to hard code zero length for empty list because of error message
+		right_size = 0
+
+	i = 0
+	j = 0
+
+	while(i < left_size and j < right_size): #indices run until out of bounds
+		if left_array[i][2] > right_array[j][2]:
+			ordered_array.append(right_array[j])
+			j += 1
+		elif left_array[i][2] < right_array[j][2]:
+			ordered_array.append(left_array[i])
+			i += 1
+		else:
+			ordered_array.append(left_array[i])
+			ordered_array.append(right_array[j])
+			i += 1
+			j += 1
+	while i < left_size: #activates if one of the lists goes through its elements soon
+		ordered_array.append(left_array[i])
+		i += 1
+	while j < right_size: #activates if one of the lists goes through its elements soon
+		ordered_array.append(right_array[j])
+		j += 1
+	return ordered_array
 
 if __name__ == "__main__":
 	start = time.time()
 	num_jobs, weights_lengths = read_file()
-	sorted_array = quicksort(weights_lengths[:11])
+	sorted_array = merge_sort(weights_lengths[:11])
 	end = time.time()
 	print(sorted_array)
 	print("run time:", end - start)
