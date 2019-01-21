@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+import random #for randomizing lists
+import time
 
 def read_file():
 	f = open('jobs.txt', 'r')
@@ -7,19 +9,60 @@ def read_file():
 		lines = f.readlines()
 		num_jobs = int(lines[0])
 		lines = lines[1:]
-		lines = {(int(line.split()[0]), int(line.split()[1])) : (int(line.split()[0]) - int(line.split()[1]))  for line in lines}
+		lines = [(int(line.split()[0]), int(line.split()[1]), int(line.split()[0]) - int(line.split()[1])) for line in lines]
 		f.close()
 		return num_jobs, lines
 	else:
-		print("error: problem with file")
 		f.close()
-		return "Fix it!"
 
+
+
+def quicksort(to_be_sorted):
+	"""this method sorts an array of unique positive numbers using
+	the quicksort algorithm using the last element as a pivot."""
+	if len(to_be_sorted) == 0:
+		return []
+	if len(to_be_sorted) == 1:
+		return to_be_sorted
+	if len(to_be_sorted) > 1:
+		i = 0
+		j = 0
+		upper_limit = len(to_be_sorted)
+		print(to_be_sorted)
+		while j < upper_limit - 1:
+			if i == j and to_be_sorted[j][2] < to_be_sorted[upper_limit -1][2]:
+				print(to_be_sorted[j][2], "vs", to_be_sorted[upper_limit -1][2])
+				i += 1
+				j += 1
+			elif to_be_sorted[j][2] > to_be_sorted[upper_limit -1][2]:
+				print(to_be_sorted[j][2], "vs", to_be_sorted[upper_limit -1][2])
+				j += 1
+			elif to_be_sorted[j][2] < to_be_sorted[upper_limit -1][2]: # [49, 97, 53, 5, 33, 65, 62, 51, 38, 61]
+			    print(to_be_sorted[j][2], "vs", to_be_sorted[upper_limit -1][2])
+			    to_be_sorted[i], to_be_sorted[j] = swap(to_be_sorted[i], to_be_sorted[j])
+			    i += 1
+			    j += 1
+	to_be_sorted[i], to_be_sorted[upper_limit -1] = swap(to_be_sorted[i], to_be_sorted[upper_limit -1])
+	to_be_sorted[:i] = quicksort(to_be_sorted[:i])
+	to_be_sorted[i:] = quicksort(to_be_sorted[i:])
+	print(to_be_sorted)
+	return to_be_sorted
+
+
+def swap(element_1, element_2):
+	"""this method swaps two elements passed into the function"""
+	holder = element_1
+	element_1 = element_2
+	element_2 = holder
+	return element_1, element_2
 
 if __name__ == "__main__":
+	start = time.time()
 	num_jobs, weights_lengths = read_file()
-	#print(num_jobs)
-	print(weights_lengths)
+	sorted_array = quicksort(weights_lengths[:11])
+	end = time.time()
+	print(sorted_array)
+	print("run time:", end - start)
 
 """This file describes a set of jobs with positive and
 integral weights and lengths. It has the format
