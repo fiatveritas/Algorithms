@@ -39,9 +39,12 @@ def quicksort(to_be_sorted):
 				j += 1
 			elif to_be_sorted[j][2] < to_be_sorted[upper_limit -1][2]: # [49, 97, 53, 5, 33, 65, 62, 51, 38, 61]
 			    print(to_be_sorted[j][2], "vs", to_be_sorted[upper_limit -1][2])
-			    to_be_sorted[i], to_be_sorted[j] = swap(to_be_sorted[i], to_be_sorted[j])
 			    i += 1
 			    j += 1
+			elif to_be_sorted[j][2] == to_be_sorted[j][2]:
+				print(to_be_sorted[j][2], "vs", to_be_sorted[upper_limit -1][2])
+				i += 1
+				j += 1
 	to_be_sorted[i], to_be_sorted[upper_limit -1] = swap(to_be_sorted[i], to_be_sorted[upper_limit -1])
 	to_be_sorted[:i] = quicksort(to_be_sorted[:i])
 	to_be_sorted[i:] = quicksort(to_be_sorted[i:])
