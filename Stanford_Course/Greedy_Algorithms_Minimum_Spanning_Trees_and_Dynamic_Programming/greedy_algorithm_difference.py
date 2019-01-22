@@ -77,10 +77,18 @@ def ascending_order(left_array, right_array):
 			ordered_array.append(left_array[i])
 			i += 1
 		else:
-			ordered_array.append(left_array[i])
-			ordered_array.append(right_array[j])
-			i += 1
-			j += 1
+			print(left_array[i], right_array[j])
+			if left_array[i][0] < right_array[j][0]:
+				ordered_array.append(right_array[j])
+				ordered_array.append(left_array[i])
+				i += 1
+				j += 1
+			else:
+				ordered_array.append(left_array[i])
+				ordered_array.append(right_array[j])
+				i += 1
+				j += 1
+
 	while i < left_size: #activates if one of the lists goes through its elements soon
 		ordered_array.append(left_array[i])
 		i += 1
@@ -90,11 +98,13 @@ def ascending_order(left_array, right_array):
 	return ordered_array
 
 if __name__ == "__main__":
+	high = 76
 	start = time.time()
 	num_jobs, weights_lengths = read_file()
-	sorted_array = merge_sort(weights_lengths[:11])
+	print(weights_lengths[:high])
+	sorted_array = merge_sort(weights_lengths[:high])
 	end = time.time()
-	print(sorted_array)
+	print("xxxxxxxxxxxx",sorted_array)
 	print("run time:", end - start)
 
 """This file describes a set of jobs with positive and
