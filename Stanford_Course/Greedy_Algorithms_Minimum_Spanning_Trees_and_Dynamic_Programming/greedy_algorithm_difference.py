@@ -17,19 +17,34 @@ def read_file():
 
 def by_diff(item):
 	return item[2]
+
 def by_weight(item):
 	return item[0]
 
+def weighed_sum(list_of_interest):
+	length_initial = 0
+	total_sum = 0
+	for i in list_of_interest:
+		length_initial = length_now(i, length_initial)
+		#print(i[0], length_initial)
+		#print(i[0] * length_initial)
+		total_sum += i[0] * length_initial
+	return total_sum
+
+def length_now(tuple_passed, length_so_far):
+	return length_so_far + tuple_passed[1]
+
 if __name__ == "__main__":
-	high = 10000
+	high = 6
 	start = time.time()
 	num_jobs, weights_lengths = read_file()
 	#sorted_array = merge_sort(weights_lengths[:high])
-	sorted_array = sorted(sorted(weights_lengths, key = by_weight, reverse = True), key = by_diff)
+	sorted_array = sorted(sorted(weights_lengths, key = by_weight, reverse = True), key = by_diff, reverse = True)
 	end = time.time()
 	#print(weights_lengths[:high])
-	print("xxxxxxxxxxxx",sorted_array)
+	#print("xxxxxxxxxxxx",sorted_array)
 	print("run time:", end - start)
+	print("at last", weighed_sum(sorted_array))
 
 """This file describes a set of jobs with positive and
 integral weights and lengths. It has the format
