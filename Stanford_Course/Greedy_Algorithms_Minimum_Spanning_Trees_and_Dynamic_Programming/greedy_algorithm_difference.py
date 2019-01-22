@@ -15,109 +15,17 @@ def read_file():
 	else:
 		f.close()
 
-def merge_sort(given_list):
-	"""This method runs merge
-	sorting calls on several
-	defined functions."""
-
-	merged_array = []
-
-	if len(given_list) == 0: #base case for empty list
-		return [] #must return empty, otherwise get error
-	if len(given_list) == 1: #base case for when list is one length, key point
-		return given_list
-	if len(given_list) > 0: #base case for divide and conquer
-		on_the_left = merge_sort(left_list(given_list))
-		on_the_right = merge_sort(right_list(given_list))
-		merged_array = ascending_order(on_the_left, on_the_right)
-	return merged_array
-
-def left_list(given_list):
-	"""Creates left list by contiually
-	dividing input list by two. This
-	method does first half of the given
-	array."""
-	if int(len(given_list) / 2) > 0:
-		return given_list[:int(len(given_list) / 2)]
-	else:
-		return []
-
-def right_list(given_list):
-	"""Creates left list by contiually
-	dividing input list by two. This
-	method does second half of the give
-	array."""
-	if int(len(given_list) / 2) > 0:
-		return given_list[int(len(given_list) / 2):]
-	else:
-		return []			
-
-def ascending_order(left_array, right_array):
-	"""This method sorts the array by
-	ascending order."""
-	ordered_array = []
-
-	if left_array:
-		left_size = len(left_array)
-	else: #need to hard code zero length for empty list because of error message
-		left_size = 0
-	if right_array:
-		right_size = len(right_array)
-	else: #need to hard code zero length for empty list because of error message
-		right_size = 0
-
-	i = 0
-	j = 0
-
-	while(i < left_size and j < right_size): #indices run until out of bounds
-		if left_array[i][2] > right_array[j][2]:
-			ordered_array.append(right_array[j])
-			j += 1
-		elif left_array[i][2] < right_array[j][2]:
-			ordered_array.append(left_array[i])
-			i += 1
-		else:
-			#print(left_array[i], right_array[j])
-			if left_array[i][0] < right_array[j][0]:
-				ordered_array.append(right_array[j])
-				ordered_array.append(left_array[i])
-				i += 1
-				j += 1
-			elif left_array[i][0] > right_array[j][0]:
-				ordered_array.append(left_array[i])
-				ordered_array.append(right_array[j])
-				i += 1
-				j += 1
-			else:
-				if left_array[i][1] < right_array[j][1]:
-					ordered_array.append(left_array[i])
-					ordered_array.append(right_array[j])
-					i += 1
-					j += 1
-				elif left_array[i][1] > right_array[j][1]:
-					ordered_array.append(right_array[j])
-					ordered_array.append(left_array[i])
-					i += 1
-					j += 1
-				else:
-					ordered_array.append(left_array[i])
-					ordered_array.append(right_array[j])
-					i += 1
-					j += 1
-
-	while i < left_size: #activates if one of the lists goes through its elements soon
-		ordered_array.append(left_array[i])
-		i += 1
-	while j < right_size: #activates if one of the lists goes through its elements soon
-		ordered_array.append(right_array[j])
-		j += 1
-	return ordered_array
+def by_diff(item):
+	return item[2]
+def by_weight(item):
+	return item[0]
 
 if __name__ == "__main__":
 	high = 10000
 	start = time.time()
 	num_jobs, weights_lengths = read_file()
-	sorted_array = merge_sort(weights_lengths[:high])
+	#sorted_array = merge_sort(weights_lengths[:high])
+	sorted_array = sorted(sorted(weights_lengths, key = by_weight, reverse = True), key = by_diff)
 	end = time.time()
 	#print(weights_lengths[:high])
 	print("xxxxxxxxxxxx",sorted_array)
