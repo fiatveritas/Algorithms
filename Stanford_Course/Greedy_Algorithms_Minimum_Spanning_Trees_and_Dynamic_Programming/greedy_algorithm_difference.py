@@ -9,7 +9,7 @@ def read_file():
 		lines = f.readlines()
 		num_jobs = int(lines[0])
 		lines = lines[1:]
-		lines = [(int(line.split()[0]), int(line.split()[1]), int(line.split()[0]) - int(line.split()[1])) for line in lines]
+		lines = [(int(line.split()[0]), int(line.split()[1]), int(line.split()[0]) - int(line.split()[1]), int(line.split()[0]) / int(line.split()[1])) for line in lines]
 		f.close()
 		return num_jobs, lines
 	else:
@@ -20,6 +20,9 @@ def by_diff(item):
 
 def by_weight(item):
 	return item[0]
+
+def by_ratio(item):
+	return item[3]
 
 def weighed_sum(list_of_interest):
 	length_initial = 0
@@ -35,14 +38,15 @@ def length_now(tuple_passed, length_so_far):
 	return length_so_far + tuple_passed[1]
 
 if __name__ == "__main__":
-	high = 6
 	start = time.time()
 	num_jobs, weights_lengths = read_file()
-	#sorted_array = merge_sort(weights_lengths[:high])
 	sorted_array = sorted(sorted(weights_lengths, key = by_weight, reverse = True), key = by_diff, reverse = True)
 	end = time.time()
-	#print(weights_lengths[:high])
-	#print("xxxxxxxxxxxx",sorted_array)
+	print("run time:", end - start)
+	print("at last", weighed_sum(sorted_array))
+	start = time.time()
+	sorted_array = sorted(sorted(weights_lengths, key = by_weight, reverse = True), key = by_ratio, reverse = True)
+	end = time.time()
 	print("run time:", end - start)
 	print("at last", weighed_sum(sorted_array))
 
@@ -78,3 +82,6 @@ box below.
 ADVICE: If you get the wrong answer, try out some small
 test cases to debug your algorithm (and post your test
 	cases to the discussion forum)."""
+#69119377652
+#67311454237
+#
