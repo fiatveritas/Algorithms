@@ -2,18 +2,56 @@
 import random #for randomizing lists
 import time
 
-def read_file_weigth_length():
-	f = open('jobs.txt', 'r')
+def open_file(file_name):
+	f = open( file_name, 'r')
 	if f:
 		print("file read!")
 		lines = f.readlines()
-		num_jobs = int(lines[0])
-		lines = lines[1:]
-		lines = [(int(line.split()[0]), int(line.split()[1]), int(line.split()[0]) - int(line.split()[1]), int(line.split()[0]) / int(line.split()[1])) for line in lines]
 		f.close()
-		return num_jobs, lines
+		return lines
 	else:
 		f.close()
+
+def read_file_weigth_length(lines):
+	num_jobs = int(lines[0])
+	lines = lines[1:]
+	lines = [(int(line.split()[0]), int(line.split()[1]), int(line.split()[0]) - int(line.split()[1]), int(line.split()[0]) / int(line.split()[1])) for line in lines]
+	return num_jobs, lines
+	
+def compute_diff_cost(weights_lengths):
+	start = time.time()
+	sorted_array = sorted(sorted(weights_lengths, key = by_weight, reverse = True), key = by_diff, reverse = True)
+	print("diff cost:", weighed_sum(sorted_array))
+	end = time.time()
+	print("run time:", end - start)
+
+def compute_ratio_cost(weights_lengths):
+	start = time.time()
+	sorted_array = sorted(sorted(weights_lengths, key = by_weight, reverse = True), key = by_ratio, reverse = True)
+	print("ratio cost:", weighed_sum(sorted_array))
+	end = time.time()
+	print("run time:", end - start)
+
+def create_graph(list_of_tuples):
+	graph = {}
+	return graph
+
+def by_diff(item):
+	return item[2]
+
+def by_weight(item):
+	return item[0]
+
+def by_ratio(item):
+	return item[3]
+
+def weighed_sum(list_of_interest):
+	length_initial = 0
+	total_sum = 0
+	for i in list_of_interest:
+		length_initial = length_now(i, length_initial)
+		total_sum += i[0] * length_initial
+	return total_sum
 
 def read_file_graph():
 	f = open('edges.txt', 'r')
@@ -30,44 +68,25 @@ def read_file_graph():
 	else:
 		f.close()
 
-def by_diff(item):
-	return item[2]
-
-def by_weight(item):
-	return item[0]
-
-def by_ratio(item):
-	return item[3]
-
-def weighed_sum(list_of_interest):
-	length_initial = 0
-	total_sum = 0
-	for i in list_of_interest:
-		length_initial = length_now(i, length_initial)
-		#print(i[0], length_initial)
-		#print(i[0] * length_initial)
-		total_sum += i[0] * length_initial
-	return total_sum
+def master_cost():
+	file_1 = 'jobs.txt'
+	lines = open_file(file_1)
+	num_jobs, weights_lengths = read_file_weigth_length(lines)
+	print("###################")
+	print("# of jobs:", num_jobs)
+	print("###################")
+	compute_diff_cost(weights_lengths)
+	print("###################")
+	compute_ratio_cost(weights_lengths)
 
 def length_now(tuple_passed, length_so_far):
 	return length_so_far + tuple_passed[1]
 
 if __name__ == "__main__":
-	"""###################
-	start = time.time()
-	num_jobs, weights_lengths = read_file_weigth_length()
-	sorted_array = sorted(sorted(weights_lengths, key = by_weight, reverse = True), key = by_diff, reverse = True)
-	end = time.time()
-	print("run time:", end - start)
-	print("at last", weighed_sum(sorted_array))
+	master_cost()
 	###################
-	start = time.time()
-	sorted_array = sorted(sorted(weights_lengths, key = by_weight, reverse = True), key = by_ratio, reverse = True)
-	end = time.time()
-	print("run time:", end - start)
-	print("at last", weighed_sum(sorted_array))
-	###################"""
-	nodes, edges, graph = read_file_graph()
+	#nodes, edges, list_of_edges = read_file_graph()
+	#print(nodes, edges)
 
 
 """This file describes a set of jobs with positive and
