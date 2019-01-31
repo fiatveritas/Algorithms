@@ -11,11 +11,12 @@ def open_file(file_name):
 		return lines
 	else:
 		f.close()
+def make_tuples_weight_length(list_of_interest):
+	return [(int(line.split()[0]), int(line.split()[1]), int(line.split()[0]) - int(line.split()[1]), int(line.split()[0]) / int(line.split()[1])) for line in list_of_interest]
 
 def read_file_weigth_length(lines):
 	num_jobs = int(lines[0])
-	lines = lines[1:]
-	lines = [(int(line.split()[0]), int(line.split()[1]), int(line.split()[0]) - int(line.split()[1]), int(line.split()[0]) / int(line.split()[1])) for line in lines]
+	lines = make_tuples_weight_length(lines[1:])
 	return num_jobs, lines
 	
 def compute_diff_cost(weights_lengths):
@@ -31,10 +32,6 @@ def compute_ratio_cost(weights_lengths):
 	print("ratio cost:", weighed_sum(sorted_array))
 	end = time.time()
 	print("run time:", end - start)
-
-def create_graph(list_of_tuples):
-	graph = {}
-	return graph
 
 def by_diff(item):
 	return item[2]
@@ -53,16 +50,6 @@ def weighed_sum(list_of_interest):
 		total_sum += i[0] * length_initial
 	return total_sum
 
-def read_file_graph():
-	file_name = 'edges.txt'
-	lines = open_file(file_name)
-	nodes, edges = int(lines[0].split()[0]), int(lines[0].split()[1])
-	print(nodes, edges)
-	lines = lines[1:]
-	print(lines)
-	#lines = [(int(line.split()[0]), int(line.split()[1]), int(line.split()[0]) - int(line.split()[1]), int(line.split()[0]) / int(line.split()[1])) for line in lines]
-	return nodes, edges, lines
-
 def master_cost():
 	file_1 = 'jobs.txt'
 	lines = open_file(file_1)
@@ -74,15 +61,50 @@ def master_cost():
 	print("###################")
 	compute_ratio_cost(weights_lengths)
 
+def read_file_graph():
+	file_name = 'edges.txt'
+	lines = open_file(file_name)
+	nodes, edges = int(lines[0].split()[0]), int(lines[0].split()[1])
+	lines = create_graph(lines[1:])
+	return nodes, edges, lines
+
+def create_edges(list_of_tuples):
+	new_list = []
+	for line in list_of_tuples:
+		temp = line.split()
+		new_list.append((int(temp[0]), int(temp[1]), int(temp[2])))
+	return new_list
+
+def create_graph(list_of_tuples):
+	graph = {}
+	for i in create_edges(list_of_tuples):
+		if i[0] not in graph:
+			graph[i[0]] = [i]
+		else:
+			graph[i[0]].append(i)
+	return graph
+
+def primm_algorithm(graph):
+	random.seed(a = 0)
+	starting_node = random.choice(list(graph.keys()))
+	print("Starting Node:", starting_node)
+	min_span_tree = []
+	edges_so_far = []
+	return min_span_tree
+
 def length_now(tuple_passed, length_so_far):
 	return length_so_far + tuple_passed[1]
 
 if __name__ == "__main__":
 	#master_cost()
 	###################
-	nodes, edges, list_of_edges = read_file_graph()
-	print(nodes, edges)
+	nodes, edges, graph = read_file_graph()
+	print("# of nodes:", nodes)
+	print("# of edges", edges)
+	primm_algorithm(graph)
 
+
+#random.choice()
 
 """This file describes a set of jobs with positive and
 integral weights and lengths. It has the format
