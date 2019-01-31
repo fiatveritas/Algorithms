@@ -54,19 +54,14 @@ def weighed_sum(list_of_interest):
 	return total_sum
 
 def read_file_graph():
-	f = open('edges.txt', 'r')
-	if f:
-		print("file read!")
-		lines = f.readlines()
-		nodes, edges = int(lines[0].split()[0]), int(lines[0].split()[1])
-		print(nodes, edges)
-		lines = lines[1:]
-		print(lines)
-		#lines = [(int(line.split()[0]), int(line.split()[1]), int(line.split()[0]) - int(line.split()[1]), int(line.split()[0]) / int(line.split()[1])) for line in lines]
-		f.close()
-		return nodes, edges, lines
-	else:
-		f.close()
+	file_name = 'edges.txt'
+	lines = open_file(file_name)
+	nodes, edges = int(lines[0].split()[0]), int(lines[0].split()[1])
+	print(nodes, edges)
+	lines = lines[1:]
+	print(lines)
+	#lines = [(int(line.split()[0]), int(line.split()[1]), int(line.split()[0]) - int(line.split()[1]), int(line.split()[0]) / int(line.split()[1])) for line in lines]
+	return nodes, edges, lines
 
 def master_cost():
 	file_1 = 'jobs.txt'
@@ -83,10 +78,10 @@ def length_now(tuple_passed, length_so_far):
 	return length_so_far + tuple_passed[1]
 
 if __name__ == "__main__":
-	master_cost()
+	#master_cost()
 	###################
-	#nodes, edges, list_of_edges = read_file_graph()
-	#print(nodes, edges)
+	nodes, edges, list_of_edges = read_file_graph()
+	print(nodes, edges)
 
 
 """This file describes a set of jobs with positive and
