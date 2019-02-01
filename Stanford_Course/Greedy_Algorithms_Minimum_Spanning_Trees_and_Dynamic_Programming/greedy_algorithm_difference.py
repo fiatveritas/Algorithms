@@ -84,8 +84,19 @@ def create_graph(list_of_tuples):
 			graph[i[0]].append(i)
 	return graph
 
-def primm_algorithm(graph, starting_node, edges_so_far, min_span_tree):
-	###will recode
+def primm_algorithm(graph, starting_node, nodes):
+	min_span_tree = []
+	edges_so_far = []
+
+	while len(edges_so_far) != nodes:
+		if starting_node not in edges_so_far:
+			edges_so_far.append(starting_node)
+			if starting_node not in list(graph.keys()):
+				continue
+			else:
+				new_edge = min_tuple(graph[starting_node])
+				starting_node = new_edge[1]
+				min_span_tree.append(new_edge)
 	return min_span_tree
 
 def min_tuple(list_of_tuples):
@@ -104,13 +115,12 @@ if __name__ == "__main__":
 	#master_cost()
 	###################
 	nodes, edges, graph = read_file_graph()
-	min_span_tree, edges_so_far = [], []
 	print("# of nodes:", nodes)
 	print("# of edges", edges)
 	random.seed(a = 0)
 	starting_node = random.choice(list(graph.keys()))
 	#print(graph)
-	min_span_tree = primm_algorithm(graph, starting_node, edges_so_far, min_span_tree)
+	min_span_tree = primm_algorithm(graph, starting_node, nodes)
 	#print(min_span_tree)
 
 
