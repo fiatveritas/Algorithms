@@ -80,23 +80,31 @@ def create_graph(list_of_tuples):
 	for i in create_edges(list_of_tuples):
 		if i[0] not in graph:
 			graph[i[0]] = [i]
+			if i[1] not in graph:
+				graph[i[1]] = []
 		else:
 			graph[i[0]].append(i)
 	return graph
 
 def primm_algorithm(graph, starting_node, nodes):
 	min_span_tree = []
-	edges_so_far = []
+	explored = []
+	unexplored = list(graph.keys())
 
-	while len(edges_so_far) != nodes:
-		if starting_node not in edges_so_far:
-			edges_so_far.append(starting_node)
-			if starting_node not in list(graph.keys()):
-				continue
-			else:
-				new_edge = min_tuple(graph[starting_node])
-				starting_node = new_edge[1]
-				min_span_tree.append(new_edge)
+	if starting_node not in explored:
+		explored.append(starting_node)
+		unexplored = [i for i in unexplored if i not in explored]
+		print(starting_node, unexplored)
+	while unexplored:
+		print("number of nodes explored:", len(explored), "starting node:", starting_node)
+		print("nodes explored: ", explored)
+		print("nodes unexplored", unexplored)
+		min_cost_edge = min_tuple(graph[starting_node])
+		if min_cost_edge[1] not in explored:
+			explored.append(min_cost_edge[1])
+			unexplored = [i for i in unexplored if i not in explored]
+		break
+
 	return min_span_tree
 
 def min_tuple(list_of_tuples):
@@ -115,6 +123,7 @@ if __name__ == "__main__":
 	#master_cost()
 	###################
 	nodes, edges, graph = read_file_graph()
+	sum = 0
 	print("# of nodes:", nodes)
 	print("# of edges", edges)
 	random.seed(a = 0)
@@ -122,6 +131,10 @@ if __name__ == "__main__":
 	#print(graph)
 	min_span_tree = primm_algorithm(graph, starting_node, nodes)
 	#print(min_span_tree)
+	#print(len(min_span_tree))
+	"""for i in min_span_tree:
+		sum += i[2]
+	print(sum)"""
 
 
 #random.choice()
