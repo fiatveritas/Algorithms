@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import random #for randomizing lists
 import time
+import math
 
 def open_file(file_name):
 	f = open( file_name, 'r')
@@ -86,35 +87,47 @@ def create_graph(list_of_tuples):
 			graph[i[0]].append(i)
 	return graph
 
-def primm_algorithm(graph, starting_node, nodes):
-	min_span_tree = []
-	explored = []
-	unexplored = list(graph.keys())
+def primm_algorithm(graph, starting_node, seen, not_seen, queue, min_span_tree):
+	if not not_seen:
+		return starting_node, seen, not_seen, queue, min_span_tree
+	else:
+		print(graph[starting_node])
+		for i in graph[starting_node]:
+			print(i)
+			seen.append(starting_node)
+			not_seen.remove(starting_node)
+			if not graph[starting_node]:
+				continue
+			min_edge, need_to_explore = min_tuple(graph[starting_node])
+			if not queue:
+				queue = [min_edge]
+			else:
+				queue.append(min_edge)
+			min_edge, queue = min_tuple(queue)
+			if not queue:
+				queue = need_to_explore
+			else:
+				queue = queue + need_to_explore
+			min_span_tree.append(min_edge)
+			starting_node = min_edge[1]
+			starting_node, seen, not_seen, queue, min_span_tree = primm_algorithm(graph, starting_node, seen, not_seen, queue, min_span_tree)
+	return starting_node, seen, not_seen, queue, min_span_tree
 
-	if starting_node not in explored:
-		explored.append(starting_node)
-		unexplored = [i for i in unexplored if i not in explored]
-		print(starting_node, unexplored)
-	while unexplored:
-		print("number of nodes explored:", len(explored), "starting node:", starting_node)
-		print("nodes explored: ", explored)
-		print("nodes unexplored", unexplored)
-		min_cost_edge = min_tuple(graph[starting_node])
-		if min_cost_edge[1] not in explored:
-			explored.append(min_cost_edge[1])
-			unexplored = [i for i in unexplored if i not in explored]
-		break
 
-	return min_span_tree
 
 def min_tuple(list_of_tuples):
-	min_tuple = ()
+	list_of_min = []
+	weight = math.inf
 	for i in list_of_tuples:
-		if not min_tuple:
-			min_tuple = i
-		elif i[2] < min_tuple[2]:
-			min_tuple = i
-	return min_tuple
+		if not list_of_min:
+			list_of_min.append(i)
+		elif i[2] < weight:
+			list_of_min.clear()
+			list_of_min.append(i)
+		elif i[2] == weight:
+			list_of_min.append(i)
+	min_edge = random.choice(list_of_min)
+	return min_edge, list_of_tuples.remove(min_edge)
 
 def length_now(tuple_passed, length_so_far):
 	return length_so_far + tuple_passed[1]
@@ -123,15 +136,19 @@ if __name__ == "__main__":
 	#master_cost()
 	###################
 	nodes, edges, graph = read_file_graph()
-	sum = 0
-	print("# of nodes:", nodes)
-	print("# of edges", edges)
 	random.seed(a = 0)
 	starting_node = random.choice(list(graph.keys()))
+	seen = []
+	not_seen = list(graph.keys())
+	queue = []
+	min_span_tree = []
 	#print(graph)
-	min_span_tree = primm_algorithm(graph, starting_node, nodes)
-	#print(min_span_tree)
+	#print("# of nodes:", nodes)
+	#print("# of edges", edges)
+	ending_node, seen, not_seen, queue, min_span_tree = primm_algorithm(graph, starting_node, seen, not_seen, queue, min_span_tree)
+	print(min_span_tree)
 	#print(len(min_span_tree))
+	#sum = 0
 	"""for i in min_span_tree:
 		sum += i[2]
 	print(sum)"""
