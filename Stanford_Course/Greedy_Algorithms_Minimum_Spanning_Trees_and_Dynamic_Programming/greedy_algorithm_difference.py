@@ -66,19 +66,23 @@ def read_file_graph():
 	file_name = 'edges.txt'
 	lines = open_file(file_name)
 	nodes, edges = int(lines[0].split()[0]), int(lines[0].split()[1])
-	lines = create_graph(lines[1:])
-	return nodes, edges, lines
+	lines, reversed_lines = create_edges(lines[1:])
+	graph = create_graph(lines)
+	reverse_graph = create_graph(reversed_lines)
+	return nodes, edges, graph, reverse_graph
 
 def create_edges(list_of_tuples):
 	new_list = []
+	reversed_list = []
 	for line in list_of_tuples:
 		temp = line.split()
 		new_list.append((int(temp[0]), int(temp[1]), int(temp[2])))
-	return new_list
+		reversed_list.append((int(temp[1]), int(temp[0]), int(temp[2])))
+	return new_list, reversed_list
 
 def create_graph(list_of_tuples):
 	graph = {}
-	for i in create_edges(list_of_tuples):
+	for i in list_of_tuples:
 		if i[0] not in graph:
 			graph[i[0]] = [i]
 			if i[1] not in graph:
@@ -87,7 +91,7 @@ def create_graph(list_of_tuples):
 			graph[i[0]].append(i)
 	return graph
 
-def primm_algorithm(graph, starting_node, seen, not_seen, queue, min_span_tree):
+def primm_algorithm(graph, reverse_graph, starting_node, seen, not_seen, queue, min_span_tree):
 	if not not_seen:
 		return starting_node, seen, not_seen, queue, min_span_tree
 	else:
@@ -96,9 +100,7 @@ def primm_algorithm(graph, starting_node, seen, not_seen, queue, min_span_tree):
 			print(i)
 			seen.append(starting_node)
 			not_seen.remove(starting_node)
-			if not graph[starting_node]:
-				continue
-			min_edge, need_to_explore = min_tuple(graph[starting_node])
+			min_edge, need_to_explore = min_tuple(graph[starting_node]) #need a condition to check this graphs[staring_node]
 			if not queue:
 				queue = [min_edge]
 			else:
@@ -129,23 +131,30 @@ def min_tuple(list_of_tuples):
 	min_edge = random.choice(list_of_min)
 	return min_edge, list_of_tuples.remove(min_edge)
 
+def dead_end(graph, reverse_graph, starting_node):
+	if not graph[starting_node]:
+		return 0
+	else:
+		return 0
+
 def length_now(tuple_passed, length_so_far):
 	return length_so_far + tuple_passed[1]
 
 if __name__ == "__main__":
 	#master_cost()
 	###################
-	nodes, edges, graph = read_file_graph()
+	nodes, edges, graph, reverse_graph = read_file_graph()
 	random.seed(a = 0)
 	starting_node = random.choice(list(graph.keys()))
 	seen = []
 	not_seen = list(graph.keys())
 	queue = []
 	min_span_tree = []
-	#print(graph)
+	#print("forward:", graph)
+	#print("reverse:", reverse_graph)
 	#print("# of nodes:", nodes)
 	#print("# of edges", edges)
-	ending_node, seen, not_seen, queue, min_span_tree = primm_algorithm(graph, starting_node, seen, not_seen, queue, min_span_tree)
+	ending_node, seen, not_seen, queue, min_span_tree = primm_algorithm(graph, reverse_graph, starting_node, seen, not_seen, queue, min_span_tree)
 	print(min_span_tree)
 	#print(len(min_span_tree))
 	#sum = 0
