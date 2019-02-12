@@ -92,21 +92,26 @@ def create_graph(list_of_tuples):
 	return graph
 
 def primm_algorithm(graph, reverse_graph, starting_node, seen, not_seen, queue, min_span_tree):
+	print("seen:", seen)
+	print("not seen:", not_seen)
 	if not not_seen:
 		return starting_node, seen, not_seen, queue, min_span_tree
 	else:
-		print(graph[starting_node])
+		print("check start:", graph[starting_node])
 		seen.append(starting_node)
 		not_seen.remove(starting_node)
 		if not graph[starting_node]:
-			min_edge, need_to_explore = min_tuple(reverse_graph[starting_node]) 
+			min_edge, need_to_explore = min_tuple(reverse_graph[starting_node])
+			queue, min_edge = check_queue(queue, min_edge, need_to_explore)
 			starting_node = min_edge[1]
-			starting_node, seen, not_seen, queue, min_span_tree = primm_algorithm(graph, reverse_graph, starting_node, seen, not_seen, queue, min_span_tree)
 ##################################################start fix here
 		for i in graph[starting_node]:
-			print(i)
+			print("graph again:", graph[starting_node])
+			print("iterate:", i)
 			min_edge, need_to_explore = min_tuple(graph[starting_node])
 			queue, min_edge = check_queue(queue, min_edge, need_to_explore)
+			print("min edge:", min_edge)
+			print("xxxxxxxxxxxxxxxx")
 ################################################need new conditional automate if-else
 			min_span_tree.append(min_edge)
 			starting_node = min_edge[1]
@@ -114,11 +119,13 @@ def primm_algorithm(graph, reverse_graph, starting_node, seen, not_seen, queue, 
 	return starting_node, seen, not_seen, queue, min_span_tree
 
 def min_tuple(list_of_tuples):
+	print("min tuple:", list_of_tuples)
 	list_of_min = []
 	weight = math.inf
 	for i in list_of_tuples:
 		if not list_of_min:
 			list_of_min.append(i)
+			weight = i[2]
 		elif i[2] < weight:
 			list_of_min.clear()
 			list_of_min.append(i)
