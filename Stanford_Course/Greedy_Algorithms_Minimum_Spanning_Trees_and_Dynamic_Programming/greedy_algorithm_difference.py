@@ -96,26 +96,21 @@ def primm_algorithm(graph, reverse_graph, starting_node, seen, not_seen, queue, 
 		return starting_node, seen, not_seen, queue, min_span_tree
 	else:
 		print(graph[starting_node])
+		seen.append(starting_node)
+		not_seen.remove(starting_node)
+		if not graph[starting_node]:
+			min_edge, need_to_explore = min_tuple(reverse_graph[starting_node]) 
+			starting_node = min_edge[1]
+##################################################start fix here
 		for i in graph[starting_node]:
 			print(i)
-			seen.append(starting_node)
-			not_seen.remove(starting_node)
-			min_edge, need_to_explore = min_tuple(graph[starting_node]) #need a condition to check this graphs[staring_node]
-			if not queue:
-				queue = [min_edge]
-			else:
-				queue.append(min_edge)
-			min_edge, queue = min_tuple(queue)
-			if not queue:
-				queue = need_to_explore
-			else:
-				queue = queue + need_to_explore
+			min_edge, need_to_explore = min_tuple(graph[starting_node])
+			queue, min_edge = check_queue(queue, min_edge, need_to_explore)
+################################################need new conditional automate if-else
 			min_span_tree.append(min_edge)
 			starting_node = min_edge[1]
 			starting_node, seen, not_seen, queue, min_span_tree = primm_algorithm(graph, starting_node, seen, not_seen, queue, min_span_tree)
 	return starting_node, seen, not_seen, queue, min_span_tree
-
-
 
 def min_tuple(list_of_tuples):
 	list_of_min = []
@@ -131,11 +126,17 @@ def min_tuple(list_of_tuples):
 	min_edge = random.choice(list_of_min)
 	return min_edge, list_of_tuples.remove(min_edge)
 
-def dead_end(graph, reverse_graph, starting_node):
-	if not graph[starting_node]:
-		return 0
+def check_queue(queue, min_edge, need_to_explore):
+	if not queue:
+		queue = [min_edge]
 	else:
-		return 0
+		queue.append(min_edge)
+	min_edge, queue = min_tuple(queue)
+	if not queue:
+		queue = need_to_explore
+	else:
+		queue = queue + need_to_explore
+	return queue, min_edge
 
 def length_now(tuple_passed, length_so_far):
 	return length_so_far + tuple_passed[1]
