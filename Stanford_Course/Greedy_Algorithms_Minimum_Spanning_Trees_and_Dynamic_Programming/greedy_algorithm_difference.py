@@ -99,16 +99,51 @@ def primm_algorithm(graph, starting_node, seen, not_seen, queue, min_span_tree):
 	while not_seen:
 		print("starting_node:", starting_node)
 		print("graph[starting_node]:", graph[starting_node])
-		queue = queue + graph[starting_node]
-		min_edge = min_tuple(queue)
-		print("min_edge:", min_edge)
-		min_span_tree.append(min_edge)
-		print("queue clean_up:", queue)
 		seen.append(starting_node)
 		not_seen.remove(starting_node)
-		starting_node = new_node(min_edge, seen)
-		queue = clean_up(seen, queue)
+		queue = queue + graph[starting_node]
+		min_edge = min_tuple(queue)
+		starting_node = choose_one(min_edge, seen)
+		print("================")
+		print("min_edge:", min_edge)
+		min_span_tree.append(min_edge)
+		print("================")
+		queue = clean_up(min_edge, queue)
+		print("queue clean_up:", queue)
+		print("xxxxxxxxxxxxxxxx")
 	return min_span_tree
+
+def update_queue(graph, starting_node, seen, queue):
+	#
+	#
+	#
+	#
+
+def min_tuple(queue):
+	holder = []
+	weight = math.inf
+	for i in queue:
+		if not holder:
+			holder.append(i)
+			weight = i[2]
+		if i[2] < weight:
+			holder.clear()
+			holder.append(i)
+			weight = i[2]
+		if i[2] == weight:
+			holder.append(i)
+	return random.choice(holder)
+
+def choose_one(min_edge, seen):
+	if min_edge[0] in seen:
+		return min_edge[1]
+	elif min_edge[1] in seen:
+		return min_edge[0]
+
+def clean_up(min_edge, queue):
+	queue.remove(min_edge)
+	queue.remove((min_edge[1], min_edge[0], min_edge[2]))
+	return queue
 
 def length_now(tuple_passed, length_so_far):
 	return length_so_far + tuple_passed[1]
@@ -127,8 +162,9 @@ if __name__ == "__main__":
 	#print("keys:", list(graph.keys()))
 	#print("# of nodes:", nodes)
 	#print("# of edges", edges)
-	#min_span_tree = primm_algorithm(graph, starting_node, seen, not_seen, queue, min_span_tree)
-	#print(min_span_tree)
+	print("xxxxxxxxxxxxxxxx")
+	min_span_tree = primm_algorithm(graph, starting_node, seen, not_seen, queue, min_span_tree)
+	print(min_span_tree)
 	#print(len(min_span_tree))
 	#sum = 0
 	"""for i in min_span_tree:
