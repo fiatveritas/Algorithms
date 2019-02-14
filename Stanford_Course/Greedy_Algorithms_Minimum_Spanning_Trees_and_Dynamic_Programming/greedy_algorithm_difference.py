@@ -96,33 +96,19 @@ def create_graph(list_of_tuples):
 	return graph
 
 def primm_algorithm(graph, starting_node, seen, not_seen, queue, min_span_tree):
-	if not not_seen:
-		return starting_node, seen, not_seen, queue, min_span_tree
-	else:
-		print("start node:", graph[starting_node])
+	while not_seen:
+		print("starting_node:", starting_node)
+		print("graph[starting_node]:", graph[starting_node])
+		queue = queue + graph[starting_node]
+		min_edge = min_tuple(queue)
+		print("min_edge:", min_edge)
+		min_span_tree.append(min_edge)
+		print("queue clean_up:", queue)
 		seen.append(starting_node)
 		not_seen.remove(starting_node)
-		for i in graph[starting_node]:
-			print("iterate:", i)
-			queue = queue + graph[starting_node]
-			min_edge = min_tuple(queue)
-		return starting_node, seen, not_seen, queue, min_span_tree
-
-def min_tuple(list_of_tuples):
-	print("min tuple:", list_of_tuples)
-	list_of_min = []
-	weight = math.inf
-	for i in list_of_tuples:
-		if not list_of_min:
-			list_of_min.append(i)
-			weight = i[2]
-		elif i[2] < weight:
-			list_of_min.clear()
-			list_of_min.append(i)
-		elif i[2] == weight:
-			list_of_min.append(i)
-	min_edge = random.choice(list_of_min)
-	return min_edge
+		starting_node = new_node(min_edge, seen)
+		queue = clean_up(seen, queue)
+	return min_span_tree
 
 def length_now(tuple_passed, length_so_far):
 	return length_so_far + tuple_passed[1]
@@ -137,11 +123,11 @@ if __name__ == "__main__":
 	not_seen = list(graph.keys())
 	queue = []
 	min_span_tree = []
-	print("graph:", graph)
+	#print("graph:", graph)
 	#print("keys:", list(graph.keys()))
 	#print("# of nodes:", nodes)
 	#print("# of edges", edges)
-	#ending_node, seen, not_seen, queue, min_span_tree = primm_algorithm(graph, starting_node, seen, not_seen, queue, min_span_tree)
+	#min_span_tree = primm_algorithm(graph, starting_node, seen, not_seen, queue, min_span_tree)
 	#print(min_span_tree)
 	#print(len(min_span_tree))
 	#sum = 0
