@@ -103,28 +103,30 @@ def primm_algorithm(graph, starting_node, seen, not_seen, queue, min_span_tree):
 		#seen.sort()
 		not_seen.remove(starting_node)
 		#print("================")
+		#print("graph[starting_node]:", graph[starting_node])
+		#print("================")
 		#print("seen:", seen)
 		queue = update_queue(graph, starting_node, seen, queue)
 		#print("================")
 		#print("queue:", queue)
 		print("================")
-		min_edge = min_tuple(queue)
+		min_edge = min_tuple(starting_node, queue)
 		print("min_tuple:", min_edge)
 		#print("================")
-		queue = clean_up(min_edge, queue)
+		queue = clean_up(min_edge, seen, queue)
 		#print("clean_up:", queue)
 		print("================")
-		starting_node = new_start(min_edge, seen, not_seen, queue)
+		starting_node = new_start(starting_node, min_edge, seen, not_seen, queue)
 		if not starting_node:
 			print("starting_node:", starting_node)
-			#print("length of seen:", len(set(seen)), seen)
+			print("length of seen:", len(set(seen)), seen)
 			if seen == list(range(1,501)):
 				print("all nodes seen")
 			#print("length of not seen:", len(not_seen), not_seen)
 			#print(queue)
 			return min_span_tree
 		print("starting_node", starting_node)
-		print("================")
+		#print("================")
 		min_span_tree.append(min_edge)
 		#print("min_span_tree:", min_span_tree)
 		#print("len tree:", len(min_span_tree))
@@ -136,34 +138,37 @@ def update_queue(graph, starting_node, seen, queue):
 			queue.append(i)
 	return queue
 
-def min_tuple(queue):
-	holder = ()
+def min_tuple(starting_node, queue):
+	holder = []
 	weight = math.inf
 	for i in queue:
 		if not holder:
-			holder = i
+			holder.append(i)
 			weight = i[2]
 		if i[2] < weight:
-			holder = i
+			holder.clear()
+			holder.append(i)
 			weight = i[2]
-	return holder
+		elif i[2] == weight:
+			holder.append(i)
+	for i in holder:
+		if starting_node in i:
+			return i
+	else:
+		return random.choice(holder)
 
-def clean_up(min_edge, queue):
-	queue.remove(min_edge)
-	queue.remove((min_edge[1], min_edge[0], min_edge[2]))
+def clean_up(min_edge, seen, queue):
+	if min_edge in queue:
+		queue.remove(min_edge)
+	if (min_edge[1], min_edge[0], min_edge[2]) in queue:
+		queue.remove((min_edge[1], min_edge[0], min_edge[2]))
 	return queue
 
-def new_start(min_edge, seen, not_seen, queue):
+def new_start(starting_node, min_edge, seen, not_seen, queue):
 	if min_edge[1] not in seen:
 		return min_edge[1]
-	elif min_edge[0] not in seen:
+	if min_edge[0] not in seen:
 		return min_edge[0]
-	else:
-		for i in queue:
-			if i[0] in not_seen:
-				return i[0]
-			elif i[1] in not_seen:
-				return i[1]
 
 def length_now(tuple_passed, length_so_far):
 	return length_so_far + tuple_passed[1]
@@ -172,7 +177,7 @@ if __name__ == "__main__":
 	#master_cost()
 	###################
 	nodes, edges, graph = read_file_graph()
-	random.seed(a = 1)
+	random.seed(a = 2)
 	starting_node = random.choice(list(graph.keys()))
 	seen = []
 	not_seen = list(graph.keys())
@@ -186,11 +191,11 @@ if __name__ == "__main__":
 	min_span_tree = primm_algorithm(graph, starting_node, seen, not_seen, queue, min_span_tree)
 	#print(min_span_tree)
 	print("length of min_span_tree:", len(min_span_tree))
-	sum = 0
+	"""sum = 0
 	for i in min_span_tree:
 		sum += i[2]
-	print(sum)
+	print(sum)"""
 
 #69119377652
 #67311454237
-#-3624209, -3795206
+#-3624209, -3795206, -3800228, -3790893, -3615728  
