@@ -116,7 +116,7 @@ def primm_algorithm(graph, starting_node, seen, not_seen, queue, min_span_tree):
 		queue = clean_up(min_edge, seen, queue)
 		#print("clean_up:", queue)
 		print("================")
-		starting_node = new_start(starting_node, min_edge, seen, not_seen, queue)
+		starting_node = new_start(starting_node, min_edge, seen, queue)
 		if not starting_node:
 			print("starting_node:", starting_node)
 			print("length of seen:", len(set(seen)), seen)
@@ -164,11 +164,26 @@ def clean_up(min_edge, seen, queue):
 		queue.remove((min_edge[1], min_edge[0], min_edge[2]))
 	return queue
 
-def new_start(starting_node, min_edge, seen, not_seen, queue):
+def new_start(starting_node, min_edge, seen, queue):
 	if min_edge[1] not in seen:
 		return min_edge[1]
 	if min_edge[0] not in seen:
 		return min_edge[0]
+	i = 0
+	queue.append(min_edge)
+	while min_edge[0] in seen and min_edge[1] in seen:
+		queue.remove(min_edge)
+		i += 1
+		random.seed(a = i)
+		if queue:
+			min_edge = min_tuple(random.choice(seen), queue)
+		else:
+			return None
+		print("new_start:", min_edge)
+		if min_edge[0] not in seen:
+			return min_edge[0]
+		if min_edge[1] not in seen:
+			return min_edge[1]
 
 def length_now(tuple_passed, length_so_far):
 	return length_so_far + tuple_passed[1]
@@ -177,7 +192,7 @@ if __name__ == "__main__":
 	#master_cost()
 	###################
 	nodes, edges, graph = read_file_graph()
-	random.seed(a = 2)
+	random.seed(a = 0)
 	starting_node = random.choice(list(graph.keys()))
 	seen = []
 	not_seen = list(graph.keys())
@@ -191,10 +206,10 @@ if __name__ == "__main__":
 	min_span_tree = primm_algorithm(graph, starting_node, seen, not_seen, queue, min_span_tree)
 	#print(min_span_tree)
 	print("length of min_span_tree:", len(min_span_tree))
-	"""sum = 0
+	sum = 0
 	for i in min_span_tree:
 		sum += i[2]
-	print(sum)"""
+	print(sum)
 
 #69119377652
 #67311454237
