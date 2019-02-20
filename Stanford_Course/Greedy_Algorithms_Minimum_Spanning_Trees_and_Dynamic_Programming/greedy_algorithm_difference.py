@@ -120,9 +120,10 @@ def primm_algorithm(graph, starting_node, seen, not_seen, queue, min_span_tree):
 		if not starting_node:
 			print("starting_node:", starting_node)
 			print("length of seen:", len(set(seen)), seen)
+			seen.sort()
 			if seen == list(range(1,501)):
 				print("all nodes seen")
-			#print("length of not seen:", len(not_seen), not_seen)
+			print("length of not seen:", len(not_seen), not_seen)
 			#print(queue)
 			return min_span_tree
 		print("starting_node", starting_node)
@@ -139,23 +140,23 @@ def update_queue(graph, starting_node, seen, queue):
 	return queue
 
 def min_tuple(starting_node, queue):
-	holder = []
+	min_edge = []
 	weight = math.inf
+
 	for i in queue:
-		if not holder:
-			holder.append(i)
+		if not min_edge:
+			min_edge.append(i)
 			weight = i[2]
-		if i[2] < weight:
-			holder.clear()
-			holder.append(i)
-			weight = i[2]
+		elif i[2] < weight:
+			min_edge.clear()
+			min_edge.append(i)
 		elif i[2] == weight:
-			holder.append(i)
-	for i in holder:
+			min_edge.append(i)
+	for i in min_edge:
 		if starting_node in i:
 			return i
 	else:
-		return random.choice(holder)
+		return random.choice(min_edge)
 
 def clean_up(min_edge, seen, queue):
 	if min_edge in queue:
@@ -169,14 +170,11 @@ def new_start(starting_node, min_edge, seen, queue):
 		return min_edge[1]
 	if min_edge[0] not in seen:
 		return min_edge[0]
-	i = 0
 	queue.append(min_edge)
 	while min_edge[0] in seen and min_edge[1] in seen:
 		queue.remove(min_edge)
-		i += 1
-		random.seed(a = i)
 		if queue:
-			min_edge = min_tuple(random.choice(seen), queue)
+			min_edge = min(queue, key = by_third)
 		else:
 			return None
 		print("new_start:", min_edge)
@@ -184,6 +182,9 @@ def new_start(starting_node, min_edge, seen, queue):
 			return min_edge[0]
 		if min_edge[1] not in seen:
 			return min_edge[1]
+
+def by_third(item):
+	return item[2]
 
 def length_now(tuple_passed, length_so_far):
 	return length_so_far + tuple_passed[1]
@@ -205,7 +206,7 @@ if __name__ == "__main__":
 	print("xxxxxxxxxxxxxxxx")
 	min_span_tree = primm_algorithm(graph, starting_node, seen, not_seen, queue, min_span_tree)
 	#print(min_span_tree)
-	print("length of min_span_tree:", len(min_span_tree))
+	print("length of min_span_tree:", len(set(min_span_tree)))
 	sum = 0
 	for i in min_span_tree:
 		sum += i[2]
@@ -213,4 +214,4 @@ if __name__ == "__main__":
 
 #69119377652
 #67311454237
-#-3624209, -3795206, -3800228, -3790893, -3615728  
+#-3612829
