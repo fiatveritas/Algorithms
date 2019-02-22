@@ -147,10 +147,11 @@ def min_tuple(starting_node, queue):
 		if not min_edge:
 			min_edge.append(i)
 			weight = i[2]
-		elif i[2] < weight:
+		if i[2] < weight:
 			min_edge.clear()
 			min_edge.append(i)
-		elif i[2] == weight:
+			weight = i[2]
+		if i[2] == weight:
 			min_edge.append(i)
 	for i in min_edge:
 		if starting_node in i:
