@@ -95,7 +95,13 @@ def create_graph(list_of_tuples):
 			graph[i[1]].append((i[1], i[0], i[2]))
 	return graph
 
-def primm_algorithm(graph, starting_node, seen, not_seen, queue, min_span_tree):
+def primm_algorithm(graph, starting_node):
+	seen = []
+	not_seen = list(graph.keys())
+	queue = []
+	min_span_tree = []
+	detritus = set()
+
 	while not_seen:
 		print("xxxxxxxxxxxxxxxx")
 		print("starting_node:", starting_node)
@@ -196,16 +202,12 @@ if __name__ == "__main__":
 	nodes, edges, graph = read_file_graph()
 	random.seed(a = 0)
 	starting_node = random.choice(list(graph.keys()))
-	seen = []
-	not_seen = list(graph.keys())
-	queue = []
-	min_span_tree = []
 	#print("graph:", graph)
 	#print("keys:", list(graph.keys()))
 	#print("# of nodes:", nodes)
 	#print("# of edges", edges)
 	print("xxxxxxxxxxxxxxxx")
-	min_span_tree = primm_algorithm(graph, starting_node, seen, not_seen, queue, min_span_tree)
+	min_span_tree = primm_algorithm(graph, starting_node)
 	#print(min_span_tree)
 	print("length of min_span_tree:", len(set(min_span_tree)))
 	sum = 0
