@@ -101,6 +101,7 @@ def primm_algorithm(graph, starting_node):
 	queue = []
 	min_span_tree = []
 	detritus = set()
+	holder = []
 
 	while not_seen:
 		print("xxxxxxxxxxxxxxxx")
@@ -112,14 +113,18 @@ def primm_algorithm(graph, starting_node):
 		#print("graph[starting_node]:", graph[starting_node])
 		#print("================")
 		#print("seen:", seen)
-		queue = update_queue(graph, starting_node, seen, queue)
+		queue = update_queue(graph, starting_node, seen, queue, detritus)
 		#print("================")
 		#print("queue:", queue)
 		print("================")
 		min_edge = min_tuple(starting_node, queue)
+		if min_edge not in holder:
+			holder.append(min_edge)
+			holder.append((min_edge[1], min_edge[0], min_edge[2]))
+		detritus = set(holder)
 		print("min_tuple:", min_edge)
 		#print("================")
-		queue = clean_up(min_edge, seen, queue)
+		queue = clean_up(min_edge, seen, queue, detritus)
 		#print("clean_up:", queue)
 		print("================")
 		starting_node = new_start(starting_node, min_edge, seen, queue)
@@ -139,11 +144,11 @@ def primm_algorithm(graph, starting_node):
 		#print("len tree:", len(min_span_tree))
 	return min_span_tree
 
-def update_queue(graph, starting_node, seen, queue):
+def update_queue(graph, starting_node, seen, queue, detritus):
 	for i in graph[starting_node]:
-		if i not in queue and (i[0] not in seen or i[1] not in seen):
+		if i not in queue:
 			queue.append(i)
-	return queue
+	return list(set(queue) - detritus)
 
 def min_tuple(starting_node, queue):
 	min_edge = []
@@ -165,12 +170,8 @@ def min_tuple(starting_node, queue):
 	else:
 		return random.choice(min_edge)
 
-def clean_up(min_edge, seen, queue):
-	if min_edge in queue:
-		queue.remove(min_edge)
-	if (min_edge[1], min_edge[0], min_edge[2]) in queue:
-		queue.remove((min_edge[1], min_edge[0], min_edge[2]))
-	return queue
+def clean_up(min_edge, seen, queue, detritus):
+	return list(set(queue) - detritus)
 
 def new_start(starting_node, min_edge, seen, queue):
 	if min_edge[1] not in seen:
