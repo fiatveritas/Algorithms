@@ -159,6 +159,7 @@ if __name__ == "__main__":
 		starting_node = random.choice(list(graph.keys()))
 		print("xxxxxxxxxxxxxxxx")
 		print("seed:", i)
+		print("starting_node:", starting_node)
 		min_span_tree = primm_algorithm(graph, starting_node)
 		print("length of min_span_tree:", len(set(min_span_tree)))
 		sum = 0
