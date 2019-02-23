@@ -121,7 +121,6 @@ def primm_algorithm(graph, starting_node):
 		queue = clean_up(queue, detritus)
 		starting_node = new_start(min_edge, seen, queue)
 		min_span_tree.append(min_edge)
-	return min_span_tree
 
 def update_queue(graph, starting_node, seen, queue, detritus):
 	for i in graph[starting_node]:
