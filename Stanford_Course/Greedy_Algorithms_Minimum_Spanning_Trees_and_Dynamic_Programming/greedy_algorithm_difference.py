@@ -63,7 +63,7 @@ def master_cost():
 	compute_ratio_cost(weights_lengths)
 
 def read_file_graph():
-	file_name = 'edges.txt'
+	file_name = 'edges_2.txt'
 	lines = open_file(file_name)
 	nodes, edges = int(lines[0].split()[0]), int(lines[0].split()[1])
 	lines = create_edges(lines[1:])
@@ -72,7 +72,6 @@ def read_file_graph():
 
 def create_edges(list_of_tuples):
 	new_list = []
-	reversed_list = []
 	for line in list_of_tuples:
 		temp = line.split()
 		new_list.append((int(temp[0]), int(temp[1]), int(temp[2])))
@@ -82,13 +81,15 @@ def create_graph(list_of_tuples):
 	graph = {}
 	for i in list_of_tuples:
 		if i[0] not in graph:
-			graph[i[0]] = [i]
+			graph[i[0]] = []
+			graph[i[0]].append(i)
 			graph[i[0]].append((i[1], i[0], i[2]))
 		else:
 			graph[i[0]].append(i)
 			graph[i[0]].append((i[1], i[0], i[2]))
 		if i[1] not in graph:
-			graph[i[1]] = [i]
+			graph[i[1]] = []
+			graph[i[1]].append(i)
 			graph[i[1]].append((i[1], i[0], i[2]))
 		else:
 			graph[i[1]].append(i)
@@ -114,20 +115,20 @@ def primm_algorithm(graph, starting_node):
 		#print("================")
 		#print("seen:", seen)
 		queue = update_queue(graph, starting_node, seen, queue, detritus)
-		#print("================")
-		#print("queue:", queue)
 		print("================")
-		min_edge = min_tuple(starting_node, queue)
+		print("queue:", queue)
+		print("================")
+		min_edge = min_tuple(queue)
 		if min_edge not in holder:
 			holder.append(min_edge)
 			holder.append((min_edge[1], min_edge[0], min_edge[2]))
 		detritus = set(holder)
 		print("min_tuple:", min_edge)
-		#print("================")
-		queue = clean_up(min_edge, seen, queue, detritus)
-		#print("clean_up:", queue)
 		print("================")
-		starting_node = new_start(starting_node, min_edge, seen, queue)
+		queue = clean_up(queue, detritus)
+		print("clean_up:", queue)
+		print("================")
+		starting_node = new_start(min_edge, seen, queue)
 		if not starting_node:
 			print("starting_node:", starting_node)
 			print("length of seen:", len(set(seen)), seen)
@@ -150,46 +151,24 @@ def update_queue(graph, starting_node, seen, queue, detritus):
 			queue.append(i)
 	return list(set(queue) - detritus)
 
-def min_tuple(starting_node, queue):
-	min_edge = []
-	weight = math.inf
+def min_tuple(queue):
+	return min(queue, key = by_third)
 
-	for i in queue:
-		if not min_edge:
-			min_edge.append(i)
-			weight = i[2]
-		if i[2] < weight:
-			min_edge.clear()
-			min_edge.append(i)
-			weight = i[2]
-		if i[2] == weight:
-			min_edge.append(i)
-	for i in min_edge:
-		if starting_node in i:
-			return i
-	else:
-		return random.choice(min_edge)
-
-def clean_up(min_edge, seen, queue, detritus):
+def clean_up(queue, detritus):
 	return list(set(queue) - detritus)
 
-def new_start(starting_node, min_edge, seen, queue):
+def new_start(min_edge, seen, queue):
 	if min_edge[1] not in seen:
 		return min_edge[1]
 	if min_edge[0] not in seen:
 		return min_edge[0]
-	queue.append(min_edge)
-	while min_edge[0] in seen and min_edge[1] in seen:
-		queue.remove(min_edge)
-		if queue:
-			min_edge = min(queue, key = by_third)
-		else:
-			return None
-		print("new_start:", min_edge)
-		if min_edge[0] not in seen:
-			return min_edge[0]
-		if min_edge[1] not in seen:
-			return min_edge[1]
+	for i in sorted(queue, key = by_third):
+		if i[0] not in seen:
+			print("new_start:", i)
+			return i[0]
+		if i[1] not in seen:
+			print("new_start:", i)
+			return i[1]
 
 def by_third(item):
 	return item[2]
