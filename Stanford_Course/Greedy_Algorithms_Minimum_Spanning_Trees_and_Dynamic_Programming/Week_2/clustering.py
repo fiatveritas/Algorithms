@@ -1,5 +1,36 @@
 #/usr/bin/python3
 
+def open_file(file_name):
+	f = open( file_name, 'r')
+	if f:
+		print("file read!")
+		lines = f.readlines()
+		f.close()
+		return lines
+	else:
+		f.close()
+
+def make_tuples_weight_length(list_of_interest):
+	new_list = []
+	for line in list_of_interest:
+		temp = line.split()
+		new_list.append((int(temp[0]), int(temp[1]), int(temp[2])))
+	return new_list
+
+def parse_input():
+	edges = open_file("clustering1.txt")
+	number_nodes = int(edges[0])
+	edges = edges[1:]
+	edges = make_tuples_weight_length(edges)
+	return number_nodes, edges
+
+if __name__ == "__main__":
+	number_nodes, edges = parse_input()
+	#print(number_nodes)
+	print(edges)
+	print("EOF")
+
+
 """In this programming problem and the next you'll code up the clustering algorithm from lecture for computing a max-spacing k-clustering.
 
 This file describes a distance function (equivalently, a complete graph with edge costs). It has the following format:
@@ -38,7 +69,7 @@ For example, the third line of the file "0 1 1 0 0 1 1 0 0 1 0 1 1 1 1 1 1 0 1 0
 
 The distance between two nodes u and v in this problem is defined as the Hamming distance--- the number of differing bits --- between the two nodes' labels. For example, the Hamming distance between the 24-bit label of node #2 above and the label "0 1 0 0 0 1 0 0 0 1 0 1 1 1 1 1 1 0 1 0 0 1 0 1" is 3 (since they differ in the 3rd, 7th, and 21st bits).
 
-The question is: what is the largest value of k such that there is a k-clustering with spacing at least 3? That is, how many clusters are needed to ensure that no pair of nodes with all but 2 bits in common get split into different clusters?
+The question is: what is the largest value of k such that there is ak -clustering with spacing at least 3? That is, how many clusters are needed to ensure that no pair of nodes with all but 2 bits in common get split into different clusters?
 
 NOTE: The graph implicitly defined by the data file is so big that you probably can't write it out explicitly, let alone sort the edges by cost. So you will have to be a little creative to complete this part of the question. For example, is there some way you can identify the smallest distances without explicitly looking at every pair of nodes?
 """
