@@ -24,12 +24,15 @@ def parse_input():
 	edges = make_tuples_weight_length(edges)
 	return number_nodes, edges
 
+def union_find(min_span_tree, to_add):
+	return 0
+
+
 if __name__ == "__main__":
 	number_nodes, edges = parse_input()
 	#print(number_nodes)
 	print(edges)
 	print("EOF")
-
 
 """In this programming problem and the next you'll code up the clustering algorithm from lecture for computing a max-spacing k-clustering.
 
