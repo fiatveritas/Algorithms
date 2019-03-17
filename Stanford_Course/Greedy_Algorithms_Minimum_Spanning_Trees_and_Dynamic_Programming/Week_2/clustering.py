@@ -25,6 +25,8 @@ def parse_input():
 	return number_nodes, edges
 
 def union_find(min_span_tree, to_add):
+	seen = []
+	start = to_add[0]
 	return 0
 
 
