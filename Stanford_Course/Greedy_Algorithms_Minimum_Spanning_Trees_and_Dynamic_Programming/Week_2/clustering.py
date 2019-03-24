@@ -1,4 +1,7 @@
 #/usr/bin/python3
+import random
+import time
+
 
 def open_file(file_name):
 	f = open( file_name, 'r')
@@ -24,16 +27,45 @@ def parse_input():
 	edges = make_tuples_weight_length(edges)
 	return number_nodes, edges
 
+def check_cycle(min_span_tree, to_add):
+	while start not in seen:
+	seen.append(start)
+	for i in min_span_tree | set([to_add]):
+		if i[0] = start:
+			start = i[0]
+	return 0
+
 def union_find(min_span_tree, to_add):
 	seen = []
-	start = to_add[0]
+	print("min_span_tree:", min_span_tree)
+	print("to_add:", to_add)
+
+	start = i[0]
+
+	print("start:", start)
+	
 	return 0
+
+def order_by_weight(item):
+	return item[2]
 
 
 if __name__ == "__main__":
+	random.seed(a = 1)
+	start_time = time.time()
+	min_span_tree = set()
+	to_add = set()
 	number_nodes, edges = parse_input()
-	#print(number_nodes)
-	print(edges)
+	edges.sort(key = order_by_weight)
+
+	for i in edges:
+		to_add = i
+		min_span_tree = union_find(min_span_tree, to_add)
+		break
+
+	#print(edges)
+	#print("number_of_edges:", number_nodes)
+	print("time_of_execution:", time.time() - start_time)
 	print("EOF")
 
 """In this programming problem and the next you'll code up the clustering algorithm from lecture for computing a max-spacing k-clustering.
