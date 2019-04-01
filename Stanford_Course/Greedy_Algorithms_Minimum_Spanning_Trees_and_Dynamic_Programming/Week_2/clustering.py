@@ -28,33 +28,34 @@ def parse_input():
 	return number_nodes, edges
 
 def check_cycle(min_span_tree, to_add):
+	seen = []
+	start = to_add[0]
+	print("starting node: ", start)
 	while start not in seen:
-	seen.append(start)
-	for i in min_span_tree | set([to_add]):
-		if i[0] = start:
-			start = i[0]
-	return 0
+		seen.append(start)
+		for i in min_span_tree | set([to_add]):
+			if start == i[0] and i[1] not in seen:
+				start = i[1]
+				break
+			else:
+				break
+	return min_span_tree | set([to_add])
 
 def union_find(min_span_tree, to_add):
 	seen = []
 	print("min_span_tree:", min_span_tree)
-	print("to_add:", to_add)
-
-	start = i[0]
-
-	print("start:", start)
+	print("edge to_add:", to_add)
 	
-	return 0
+	return check_cycle(min_span_tree, to_add)
 
 def order_by_weight(item):
 	return item[2]
 
 
 if __name__ == "__main__":
-	random.seed(a = 1)
+	random.seed(a = 0)
 	start_time = time.time()
 	min_span_tree = set()
-	to_add = set()
 	number_nodes, edges = parse_input()
 	edges.sort(key = order_by_weight)
 
