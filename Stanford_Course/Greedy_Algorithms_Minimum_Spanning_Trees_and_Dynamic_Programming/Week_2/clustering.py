@@ -30,21 +30,26 @@ def parse_input():
 def check_cycle(min_span_tree, to_add):
 	seen = []
 	start = to_add[0]
-	print("starting node: ", start)
+	print("to_add:", to_add)
 	while start not in seen:
+		print("****************")
+		print("restart while-loop:")
+		print("================")
 		seen.append(start)
+		print("starting node: ", start)
 		for i in min_span_tree | set([to_add]):
+			print("xxxxxxxxxxxxxxxx")
+			print("for-loop:", i)
 			if start == i[0] and i[1] not in seen:
 				start = i[1]
 				break
-			else:
-				break
+			elif start == i[0] and i[1] in seen:
+				return min_span_tree
 	return min_span_tree | set([to_add])
 
 def union_find(min_span_tree, to_add):
-	seen = []
-	print("min_span_tree:", min_span_tree)
-	print("edge to_add:", to_add)
+	#print("min_span_tree:", min_span_tree)
+	#print("edge to_add:", to_add)
 	
 	return check_cycle(min_span_tree, to_add)
 
@@ -62,10 +67,23 @@ if __name__ == "__main__":
 	for i in edges:
 		to_add = i
 		min_span_tree = union_find(min_span_tree, to_add)
-		break
+		#break
 
 	#print(edges)
 	#print("number_of_edges:", number_nodes)
+
+	"""there = set([(0,1),(1,2),(2,3),(3,4),(4,5)])
+	new = (5,0)
+	another_new = (5,6)
+
+	print("\n\n\n\nCheck Cycle:\nxxxxxxxxxxxxxxxx")
+	print("testing:")
+	print(check_cycle(there,new))
+
+	print("\n\n\n\nCheck Cycle:\nxxxxxxxxxxxxxxxx")
+	print("testing:")
+	print(check_cycle(there,another_new))"""
+
 	print("time_of_execution:", time.time() - start_time)
 	print("EOF")
 
